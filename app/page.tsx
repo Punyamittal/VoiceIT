@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -25,10 +25,62 @@ import {
   Waves,
 } from "lucide-react"
 import ScrollFloat from "@/components/ScrollFloat"
+import VariableProximity from "@/components/VariableProximity"
+import Ribbons from "@/components/Ribbons"
 
 export default function VoiceITWebsite() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
+  const [barHeights, setBarHeights] = useState<number[]>([])
+  const [smallBarHeights, setSmallBarHeights] = useState<number[]>([])
+  
+  // Add refs for all text containers
+  const heroRef = useRef<HTMLDivElement>(null)
+  const aboutRef = useRef<HTMLDivElement>(null)
+  const eventsRef = useRef<HTMLDivElement>(null)
+  const teamRef = useRef<HTMLDivElement>(null)
+  const liveRef = useRef<HTMLDivElement>(null)
+  const contactRef = useRef<HTMLDivElement>(null)
+  const navRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLDivElement>(null)
+
+  // Add refs for text containers
+  const heroTextRef = useRef<HTMLDivElement>(null)
+  const aboutTextRef = useRef<HTMLDivElement>(null)
+  const eventsTextRef = useRef<HTMLDivElement>(null)
+  const teamTextRef = useRef<HTMLDivElement>(null)
+  const liveTextRef = useRef<HTMLDivElement>(null)
+  const contactTextRef = useRef<HTMLDivElement>(null)
+  const footerTextRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  // Function to generate random heights
+  const generateHeights = (count: number, min: number, max: number) => {
+    return Array.from({ length: count }, () => {
+      // Randomly decide if this bar should be very small
+      const shouldBeSmall = Math.random() < 0.4; // 40% chance to be small
+      if (shouldBeSmall) {
+        return Math.random() * 2; // Height between 0-2px
+      }
+      return Math.random() * (max - min) + min;
+    });
+  }
+
+  // Update bar heights frequently
+  useEffect(() => {
+    const updateHeights = () => {
+      setBarHeights(generateHeights(5, 10, 80))
+      setSmallBarHeights(generateHeights(8, 5, 40))
+    }
+
+    // Initial heights
+    updateHeights()
+
+    // Update heights every 100ms
+    const interval = setInterval(updateHeights, 800)
+
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,7 +167,17 @@ export default function VoiceITWebsite() {
               <div className="bg-accent-orange p-2 rounded-full">
                 <Mic className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-text-primary">Voice IT</span>
+              <div ref={navRef} style={{ position: 'relative' }}>
+                <VariableProximity
+                  label="Voice IT"
+                  className="text-4xl font-bold text-text-primary"
+                  fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                  toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                  containerRef={navRef as React.RefObject<HTMLElement>}
+                  radius={100}
+                  falloff="linear"
+                />
+              </div>
             </div>
 
             {/* Desktop Navigation */}
@@ -178,17 +240,26 @@ export default function VoiceITWebsite() {
                   Official RJ Club of VIT Chennai
                 </Badge>
                 <ScrollFloat
-                  animationDuration={1.2}
+                  animationDuration={1}
                   ease="back.inOut(2)"
                   scrollStart="center bottom+=50%"
                   scrollEnd="bottom bottom-=40%"
                   stagger={0.03}
-                  textClassName="text-text-primary"
+                  containerClassName="text-6xl font-bold text-text-primary"
+                  scrollContainerRef={scrollContainerRef}
                 >
                   Voice IT
                 </ScrollFloat>
                 <p className="text-xl text-text-secondary max-w-lg">
-                  Where voices come alive and stories find their rhythm. Join VIT Chennai's premier radio community.
+                  <VariableProximity
+                    label="Where voices come alive and stories find their rhythm. Join VIT Chennai's premier radio community."
+                    className="text-xl text-text-secondary"
+                    fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                    toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                    containerRef={heroTextRef as React.RefObject<HTMLElement>}
+                    radius={100}
+                    falloff="linear"
+                  />
                 </p>
               </div>
 
@@ -223,14 +294,14 @@ export default function VoiceITWebsite() {
                     <Radio className="h-12 w-12 text-white" />
                   </div>
                 </div>
-                <div className="flex justify-center space-x-2 mb-4">
-                  {[...Array(5)].map((_, i) => (
+                <div className="h-20 flex justify-center space-x-2 mb-4">
+                  {barHeights.map((height, i) => (
                     <div
                       key={i}
-                      className="w-2 bg-accent-orange rounded-full animate-pulse"
+                      className="w-2 bg-accent-orange rounded-full transition-all duration-500"
                       style={{
-                        height: `${Math.random() * 40 + 20}px`,
-                        animationDelay: `${i * 0.1}s`,
+                        height: `${height}px`,
+                        marginTop: 'auto'
                       }}
                     ></div>
                   ))}
@@ -251,14 +322,22 @@ export default function VoiceITWebsite() {
               ease="back.inOut(2)"
               scrollStart="center bottom+=50%"
               scrollEnd="bottom bottom-=40%"
-              stagger={0.02}
-              textClassName="text-text-primary"
+              stagger={0.03}
+              containerClassName="text-4xl font-bold text-text-primary"
+              scrollContainerRef={scrollContainerRef}
             >
               About Voice IT
             </ScrollFloat>
             <p className="text-xl text-text-secondary max-w-3xl mx-auto mt-4">
-              We're more than just a radio club – we're a community of storytellers, creators, and voice artists
-              passionate about audio expression.
+              <VariableProximity
+                label="We're more than just a radio club – we're a community of storytellers, creators, and voice artists passionate about audio expression."
+                className="text-xl text-text-secondary"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={aboutTextRef as React.RefObject<HTMLElement>}
+                radius={100}
+                falloff="linear"
+              />
             </p>
           </div>
 
@@ -314,12 +393,23 @@ export default function VoiceITWebsite() {
               ease="back.inOut(2)"
               scrollStart="center bottom+=50%"
               scrollEnd="bottom bottom-=40%"
-              stagger={0.02}
-              textClassName="text-text-primary"
+              stagger={0.03}
+              containerClassName="text-4xl font-bold text-text-primary"
+              scrollContainerRef={scrollContainerRef}
             >
               Upcoming Events
             </ScrollFloat>
-            <p className="text-xl text-text-secondary mt-4">Don't miss out on our exciting lineup of events and workshops</p>
+            <p className="text-xl text-text-secondary mt-4">
+              <VariableProximity
+                label="Don't miss out on our exciting lineup of events and workshops"
+                className="text-xl text-text-secondary"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={eventsTextRef as React.RefObject<HTMLElement>}
+                radius={100}
+                falloff="linear"
+              />
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -359,12 +449,23 @@ export default function VoiceITWebsite() {
               ease="back.inOut(2)"
               scrollStart="center bottom+=50%"
               scrollEnd="bottom bottom-=40%"
-              stagger={0.02}
-              textClassName="text-text-primary"
+              stagger={0.03}
+              containerClassName="text-4xl font-bold text-text-primary"
+              scrollContainerRef={scrollContainerRef}
             >
               Meet Our Team
             </ScrollFloat>
-            <p className="text-xl text-text-secondary mt-4">The voices behind Voice IT who make the magic happen</p>
+            <p className="text-xl text-text-secondary mt-4">
+              <VariableProximity
+                label="The voices behind Voice IT who make the magic happen"
+                className="text-xl text-text-secondary"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={teamTextRef as React.RefObject<HTMLElement>}
+                radius={100}
+                falloff="linear"
+              />
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -400,13 +501,22 @@ export default function VoiceITWebsite() {
               ease="back.inOut(2)"
               scrollStart="center bottom+=50%"
               scrollEnd="bottom bottom-=40%"
-              stagger={0.02}
-              textClassName="text-text-primary"
+              stagger={0.03}
+              containerClassName="text-4xl font-bold text-text-primary"
+              scrollContainerRef={scrollContainerRef}
             >
               Live Radio & Podcasts
             </ScrollFloat>
             <p className="text-xl text-text-secondary mt-4">
-              Tune in to our live broadcasts and catch up on our latest podcast episodes
+              <VariableProximity
+                label="Tune in to our live broadcasts and catch up on our latest podcast episodes"
+                className="text-xl text-text-secondary"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={liveTextRef as React.RefObject<HTMLElement>}
+                radius={100}
+                falloff="linear"
+              />
             </p>
           </div>
 
@@ -427,14 +537,14 @@ export default function VoiceITWebsite() {
                     <Play className="w-4 h-4 mr-2" />
                     Listen Live
                   </Button>
-                  <div className="flex space-x-1">
-                    {[...Array(8)].map((_, i) => (
+                  <div className="h-12 flex space-x-1">
+                    {smallBarHeights.map((height, i) => (
                       <div
                         key={i}
-                        className="w-1 bg-accent-orange rounded-full animate-pulse"
+                        className="w-1 bg-accent-orange rounded-full transition-all duration-500"
                         style={{
-                          height: `${Math.random() * 20 + 10}px`,
-                          animationDelay: `${i * 0.1}s`,
+                          height: `${height}px`,
+                          marginTop: 'auto'
                         }}
                       ></div>
                     ))}
@@ -501,13 +611,22 @@ export default function VoiceITWebsite() {
               ease="back.inOut(2)"
               scrollStart="center bottom+=50%"
               scrollEnd="bottom bottom-=40%"
-              stagger={0.02}
-              textClassName="text-text-primary"
+              stagger={0.03}
+              containerClassName="text-4xl font-bold text-text-primary"
+              scrollContainerRef={scrollContainerRef}
             >
               Join Voice IT
             </ScrollFloat>
             <p className="text-xl text-text-secondary mt-4">
-              Ready to amplify your voice? Get in touch with us and become part of our community
+              <VariableProximity
+                label="Ready to amplify your voice? Get in touch with us and become part of our community"
+                className="text-xl text-text-secondary"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={contactTextRef as React.RefObject<HTMLElement>}
+                radius={100}
+                falloff="linear"
+              />
             </p>
           </div>
 
@@ -621,11 +740,29 @@ export default function VoiceITWebsite() {
                 <div className="bg-accent-orange p-2 rounded-full">
                   <Mic className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-xl font-bold">Voice IT</span>
+                <div ref={footerRef} style={{ position: 'relative' }}>
+                  <VariableProximity
+                    label="Voice IT"
+                    className="text-2xl font-bold text-text-primary"
+                    fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                    toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                    containerRef={footerRef as React.RefObject<HTMLElement>}
+                    radius={100}
+                    falloff="linear"
+                  />
+                </div>
               </div>
-              <p className="text-text-secondary">
-                VIT Chennai's premier radio club, amplifying voices and creating connections through the power of audio.
-              </p>
+              <div ref={footerTextRef} style={{ position: 'relative' }}>
+                <VariableProximity
+                  label="VIT Chennai's premier radio club, amplifying voices and creating connections through the power of audio."
+                  className="text-text-secondary"
+                  fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                  toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                  containerRef={footerTextRef as React.RefObject<HTMLElement>}
+                  radius={120}
+                  falloff="linear"
+                />
+              </div>
             </div>
 
             <div>
