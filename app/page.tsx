@@ -27,6 +27,9 @@ import {
 import ScrollFloat from "@/components/ScrollFloat"
 import VariableProximity from "@/components/VariableProximity"
 import Ribbons from "@/components/Ribbons"
+import { AudioPlayer } from '@/components/AudioPlayer'
+import Image from "next/image"
+import TiltedCard from '../components/TiltedCard'
 
 export default function VoiceITWebsite() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -136,26 +139,48 @@ export default function VoiceITWebsite() {
 
   const teamMembers = [
     {
-      name: "Arjun Sharma",
-      role: "Club President",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Pranav",
+      role: "President",
+      image: "/team/pranav2.jpg",
     },
     {
-      name: "Priya Patel",
-      role: "Head of Programming",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Hemshyam",
+      role: "Vice President",
+      image: "/team/hemshyam.jpg",
     },
     {
-      name: "Rahul Kumar",
-      role: "Technical Lead",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Sideshwar",
+      role: "Vice President",
+      image: "/team/sideshwar.jpg",
     },
     {
-      name: "Sneha Reddy",
-      role: "Events Coordinator",
-      image: "/placeholder.svg?height=300&width=300",
+      name: "Priyanka",
+      role: "General Secretary",
+      image: "/team/priyanka.jpg",
     },
+    {
+      name: "Sai Lakshmana S",
+      role: "General Secretary",
+      image: "/team/sai.jpg",
+    },
+    {
+      name: "Kamalesh",
+      role: "General Secretary",
+      image: "/team/kamalesh.jpg",
+    }
   ]
+
+  // Add cursor effect state
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  // Handle mouse move for cursor effect
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setCursorPosition({ x, y });
+  };
 
   return (
     <div className="min-h-screen relative">
@@ -441,7 +466,7 @@ export default function VoiceITWebsite() {
       </section>
 
       {/* Team Section */}
-      <section id="team" className="py-20 bg-primary-bg/80 backdrop-blur-sm relative">
+      <section id="team" className="py-20 bg-primary-bg/80 backdrop-blur-sm relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <ScrollFloat
@@ -468,25 +493,22 @@ export default function VoiceITWebsite() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (
-              <Card
+              <TiltedCard
                 key={index}
-                className="bg-primary-bg border-neutral-light hover:shadow-lg transition-all duration-300 hover:border-accent-orange/30 group"
-              >
-                <CardContent className="p-6 text-center">
-                  <div className="relative mb-6">
-                    <img
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.name}
-                      className="w-24 h-24 rounded-full mx-auto object-cover border-4 border-accent-orange/20 group-hover:border-accent-orange/50 transition-all"
-                    />
-                    <div className="absolute inset-0 bg-accent-orange/10 rounded-full group-hover:bg-accent-orange/20 transition-all"></div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">{member.name}</h3>
-                  <p className="text-accent-orange font-medium">{member.role}</p>
-                </CardContent>
-              </Card>
+                imageSrc={member.image}
+                altText={member.name}
+                containerHeight="400px"
+                containerWidth="100%"
+                imageHeight="400px"
+                imageWidth="100%"
+                rotateAmplitude={12}
+                scaleOnHover={1.05}
+                showMobileWarning={false}
+                showTooltip={false}
+                displayOverlayContent={false}
+              />
             ))}
           </div>
         </div>
@@ -532,23 +554,22 @@ export default function VoiceITWebsite() {
                 </div>
                 <h3 className="text-2xl font-bold text-text-primary mb-2">Campus Vibes</h3>
                 <p className="text-text-secondary mb-6">Your daily dose of music, news, and campus updates</p>
-                <div className="flex items-center space-x-4">
-                  <Button className="bg-accent-orange hover:bg-accent-orange/90 text-white rounded-full">
-                    <Play className="w-4 h-4 mr-2" />
-                    Listen Live
-                  </Button>
-                  <div className="h-12 flex space-x-1">
-                    {smallBarHeights.map((height, i) => (
-                      <div
-                        key={i}
-                        className="w-1 bg-accent-orange rounded-full transition-all duration-500"
-                        style={{
-                          height: `${height}px`,
-                          marginTop: 'auto'
-                        }}
-                      ></div>
-                    ))}
-                  </div>
+                <AudioPlayer 
+                  audioUrl="/stream.mp3" 
+                  title="Campus Vibes Live Stream"
+                  className="mb-4"
+                />
+                <div className="h-12 flex space-x-1">
+                  {smallBarHeights.map((height, i) => (
+                    <div
+                      key={i}
+                      className="w-1 bg-accent-orange rounded-full transition-all duration-500"
+                      style={{
+                        height: `${height}px`,
+                        marginTop: 'auto'
+                      }}
+                    ></div>
+                  ))}
                 </div>
               </Card>
 
@@ -566,9 +587,10 @@ export default function VoiceITWebsite() {
                       <p className="font-medium text-text-primary">{podcast}</p>
                       <p className="text-sm text-text-muted">Episode {index + 1}</p>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-accent-orange hover:text-accent-orange/80">
-                      <Play className="w-4 h-4" />
-                    </Button>
+                    <AudioPlayer 
+                      audioUrl={`/podcasts/${podcast.toLowerCase().replace(/\s+/g, '-')}.mp3`}
+                      title={podcast}
+                    />
                   </div>
                 ))}
               </div>
@@ -841,7 +863,7 @@ export default function VoiceITWebsite() {
           </div>
 
           <div className="border-t border-neutral-medium mt-8 pt-8 text-center text-text-secondary">
-            <p>&copy; 2024 Voice IT - VIT Chennai. All rights reserved.</p>
+            <p>&copy; 2025 Voice IT - VIT Chennai. All rights reserved.</p>
           </div>
         </div>
       </footer>
