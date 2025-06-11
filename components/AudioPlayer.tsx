@@ -17,6 +17,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ audioUrl, title, class
   useEffect(() => {
     audioRef.current = new Audio(audioUrl);
     audioRef.current.volume = volume;
+    audioRef.current.loop = true;
+    audioRef.current.play().catch(error => {
+      console.log("Autoplay prevented:", error);
+    });
 
     return () => {
       if (audioRef.current) {

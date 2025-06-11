@@ -36,6 +36,7 @@ export default function VoiceITWebsite() {
   const [activeSection, setActiveSection] = useState("home")
   const [barHeights, setBarHeights] = useState<number[]>([])
   const [smallBarHeights, setSmallBarHeights] = useState<number[]>([])
+  const [isBackgroundMusicPlaying, setIsBackgroundMusicPlaying] = useState(false)
   
   // Add refs for all text containers
   const heroRef = useRef<HTMLDivElement>(null)
@@ -184,6 +185,15 @@ export default function VoiceITWebsite() {
 
   return (
     <div className="min-h-screen relative">
+      {/* Background Music Player */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <AudioPlayer 
+          audioUrl="/radiom.mp3" 
+          title="Background Music"
+          className="bg-primary-bg/80 backdrop-blur-md p-2 rounded-lg shadow-lg"
+        />
+      </div>
+
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-primary-bg/80 backdrop-blur-md border-b border-neutral-light z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -465,6 +475,66 @@ export default function VoiceITWebsite() {
         </div>
       </section>
 
+      {/* Past Events Section */}
+      <section className="py-16 bg-neutral-dark">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">Past Events</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Radio Workshop 2023",
+                date: "December 15, 2023",
+                image: "/placeholder.svg?height=300&width=300",
+                description: "A comprehensive workshop on radio broadcasting techniques and equipment handling.",
+                highlights: "150+ participants, 8 industry experts"
+              },
+              {
+                title: "Voice IT Annual Show",
+                date: "October 20, 2023",
+                image: "/placeholder.svg?height=300&width=300",
+                description: "Our annual showcase featuring the best of campus radio and entertainment.",
+                highlights: "Live performances, Guest RJs"
+              },
+              {
+                title: "Podcast Masterclass",
+                date: "August 5, 2023",
+                image: "/placeholder.svg?height=300&width=300",
+                description: "Learn the art of podcasting from industry professionals.",
+                highlights: "Hands-on training, Equipment demo"
+              }
+            ].map((event, index) => (
+              <div key={index} className="bg-primary-bg rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300">
+                <div className="relative">
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    width={400}
+                    height={250}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-4 right-4 bg-accent text-primary-bg px-3 py-1 rounded-full text-sm font-medium">
+                    {event.date}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                  <p className="text-neutral-light mb-4">{event.description}</p>
+                  <div className="flex items-center text-sm text-accent mb-4">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    {event.highlights}
+                  </div>
+                  <button className="w-full bg-neutral-dark text-primary-bg py-2 rounded-lg hover:bg-neutral-dark/90 transition-colors">
+                    View Gallery
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Team Section */}
       <section id="team" className="py-20 bg-primary-bg/80 backdrop-blur-sm relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -690,6 +760,7 @@ export default function VoiceITWebsite() {
               <div>
                 <h4 className="text-lg font-semibold text-text-primary mb-4">Follow Us</h4>
                 <div className="flex space-x-4">
+                <a href="https://www.instagram.com/voiceit_vitcc/" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
@@ -697,13 +768,8 @@ export default function VoiceITWebsite() {
                   >
                     <Instagram className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="border-accent-warm text-accent-warm hover:bg-accent-warm hover:text-white"
-                  >
-                    <Twitter className="h-4 w-4" />
-                  </Button>
+                 </a>
+                  <a href="https://www.youtube.com/@voiceit_vitcc" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="outline"
                     size="icon"
@@ -711,7 +777,9 @@ export default function VoiceITWebsite() {
                   >
                     <Youtube className="h-4 w-4" />
                   </Button>
+                  </a>
                 </div>
+        
               </div>
             </div>
 
@@ -754,116 +822,65 @@ export default function VoiceITWebsite() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-lightest/90 backdrop-blur-sm text-text-primary py-12 relative border-t border-neutral-medium">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="bg-accent-orange p-2 rounded-full">
-                  <Mic className="h-5 w-5 text-white" />
-                </div>
-                <div ref={footerRef} style={{ position: 'relative' }}>
-                  <VariableProximity
-                    label="Voice IT"
-                    className="text-2xl font-bold text-text-primary"
-                    fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                    toFontVariationSettings="'wght' 1000, 'opsz' 40"
-                    containerRef={footerRef as React.RefObject<HTMLElement>}
-                    radius={100}
-                    falloff="linear"
-                  />
-                </div>
-              </div>
-              <div ref={footerTextRef} style={{ position: 'relative' }}>
-                <VariableProximity
-                  label="VIT Chennai's premier radio club, amplifying voices and creating connections through the power of audio."
-                  className="text-text-secondary"
-                  fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                  toFontVariationSettings="'wght' 1000, 'opsz' 40"
-                  containerRef={footerTextRef as React.RefObject<HTMLElement>}
-                  radius={120}
-                  falloff="linear"
-                />
-              </div>
-            </div>
-
+      <footer className="bg-primary-bg border-t border-neutral-light py-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h4 className="font-semibold mb-4 text-text-primary">Quick Links</h4>
-              <ul className="space-y-2 text-text-secondary">
-                <li>
-                  <button
-                    onClick={() => scrollToSection("about")}
-                    className="hover:text-accent-orange transition-colors"
-                  >
-                    About Us
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("events")}
-                    className="hover:text-accent-orange transition-colors"
-                  >
-                    Events
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("team")}
-                    className="hover:text-accent-orange transition-colors"
-                  >
-                    Team
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("live")}
-                    className="hover:text-accent-orange transition-colors"
-                  >
-                    Live Radio
-                  </button>
-                </li>
+              <h3 className="text-xl font-bold mb-4">Voice IT</h3>
+              <p className="text-neutral-light">
+                The official RJ Club of VIT Chennai, bringing you the best in campus radio and entertainment.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+              <ul className="space-y-2">
+                <li><a href="#home" className="text-neutral-light hover:text-accent transition-colors">Home</a></li>
+                <li><a href="#about" className="text-neutral-light hover:text-accent transition-colors">About</a></li>
+                <li><a href="#team" className="text-neutral-light hover:text-accent transition-colors">Team</a></li>
+                <li><a href="#contact" className="text-neutral-light hover:text-accent transition-colors">Contact</a></li>
               </ul>
             </div>
-
             <div>
-              <h4 className="font-semibold mb-4 text-text-primary">Programs</h4>
-              <ul className="space-y-2 text-text-secondary">
-                <li>
-                  <a href="#" className="hover:text-accent-orange transition-colors">
-                    RJ Training
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-accent-orange transition-colors">
-                    Podcast Creation
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-accent-orange transition-colors">
-                    Voice Acting
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-accent-orange transition-colors">
-                    Audio Production
-                  </a>
-                </li>
+              <h3 className="text-xl font-bold mb-4">Connect</h3>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-neutral-light hover:text-accent transition-colors">Instagram</a></li>
+                <li><a href="#" className="text-neutral-light hover:text-accent transition-colors">Twitter</a></li>
+                <li><a href="#" className="text-neutral-light hover:text-accent transition-colors">LinkedIn</a></li>
+                <li><a href="https://youtu.be/GV1CV79Gr4k" target="_blank" rel="noopener noreferrer" className="text-neutral-light hover:text-accent transition-colors">YouTube</a></li>
               </ul>
             </div>
-
             <div>
-              <h4 className="font-semibold mb-4 text-text-primary">Contact Info</h4>
-              <div className="space-y-2 text-text-secondary">
-                <p>VIT Chennai Campus</p>
-                <p>Kelambakkam, Tamil Nadu</p>
-                <p>voiceit@vit.ac.in</p>
-                <p>+91 98765 43210</p>
-              </div>
+              <h3 className="text-xl font-bold mb-4">Contact</h3>
+              <ul className="space-y-2">
+                <li className="text-neutral-light">VIT Chennai Campus</li>
+                <li className="text-neutral-light">Chennai, Tamil Nadu</li>
+                <li className="text-neutral-light">Email: voiceit@vit.ac.in</li>
+              </ul>
             </div>
           </div>
-
-          <div className="border-t border-neutral-medium mt-8 pt-8 text-center text-text-secondary">
-            <p>&copy; 2025 Voice IT - VIT Chennai. All rights reserved.</p>
+          <div className="mt-8 pt-8 border-t border-neutral-light text-center">
+            <p className="text-neutral-light">
+              © {new Date().getFullYear()} Voice IT. All rights reserved.
+            </p>
+            <p className="text-neutral-light mt-2">
+              Created and Designed by{" "}
+              <a 
+                href="https://www.linkedin.com/in/punya-mittal-a1122520b/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-accent hover:text-accent/80 font-medium transition-colors duration-200 inline-flex items-center gap-1"
+              >
+                Punya Mittal
+                <svg 
+                  className="w-4 h-4" 
+                  fill="currentColor" 
+                  viewBox="0 0 24 24" 
+                  aria-hidden="true"
+                >
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a>
+            </p>
           </div>
         </div>
       </footer>
