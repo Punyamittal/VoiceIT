@@ -30,6 +30,9 @@ import Ribbons from "@/components/Ribbons"
 import { AudioPlayer } from '@/components/AudioPlayer'
 import Image from "next/image"
 import TiltedCard from '../components/TiltedCard'
+import { Carousel, Card as AppleCard } from "@/components/ui/apple-cards-carousel"
+import Folder from '@/components/Folder'
+import { EvervaultCard, Icon } from "@/components/ui/evervault-card"
 
 export default function VoiceITWebsite() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -139,36 +142,48 @@ export default function VoiceITWebsite() {
   ]
 
   const teamMembers = [
-    {
-      name: "Pranav",
-      role: "President",
-      image: "/team/pranav2.jpg",
-    },
-    {
-      name: "Hemshyam",
-      role: "Vice President",
-      image: "/team/hemshyam.jpg",
-    },
-    {
-      name: "Sideshwar",
-      role: "Vice President",
-      image: "/team/sideshwar.jpg",
-    },
-    {
-      name: "Priyanka",
-      role: "General Secretary",
-      image: "/team/priyanka.jpg",
-    },
-    {
-      name: "Sai Lakshmana S",
-      role: "General Secretary",
-      image: "/team/sai.jpg",
-    },
-    {
-      name: "Kamalesh",
-      role: "General Secretary",
-      image: "/team/kamalesh.jpg",
-    }
+    // Core Team
+    { image: "/team/pranav2.jpg" },
+    { image: "/team/hemshyam.jpg" },
+    { image: "/team/sideshwar.jpg" },
+    { image: "/team/priyanka.jpg" },
+    { image: "/team/sai.jpg" },
+    { image: "/team/kamalesh.jpg" },
+    // Advisory Board
+    { image: "/team/advisory-varishth.jpg" },
+    { image: "/team/advisory-srinidhi.jpg" },
+    { image: "/team/advisory-dishitha.jpg" },
+    { image: "/team/advisory-malavika.jpg" },
+    { image: "/team/advisory-midun.jpg" },
+    // Content Team
+    { image: "/team/content-vahini.jpg" },
+    { image: "/team/content-divya.jpg" },
+    { image: "/team/content-monica.jpg" },
+    // Design Team
+    { image: "/team/design-guru.jpg" },
+    { image: "/team/design-yoha.jpg" },
+    // HR Team
+    { image: "/team/hr-shanmitha.jpg" },
+    { image: "/team/hr-dharsan_j_k.jpg" },
+    { image: "/team/hr-haseeb-ahsan.jpg" },
+    // Tech Team
+    { image: "/team/tech-rishika.jpg" },
+    // Camera & Editing Team
+    { image: "/team/camera-annamalai.jpg" },
+    { image: "/team/camera-mithin.jpg" },
+    { image: "/team/editing-adithya.jpg" },
+    { image: "/team/editing-munis.jpg" },
+    // Language Teams
+    { image: "/team/eng-tannya.jpg" },
+    { image: "/team/eng-deekshitha.jpg" },
+    { image: "/team/tamil-jerome.jpg" },
+    { image: "/team/tamil-afzal.jpg" },
+    { image: "/team/tamil-aruthra.jpg" },
+    { image: "/team/tamil-ramanan.jpg" },
+    { image: "/team/tamil-rajaraman.jpg" },
+    { image: "/team/malyalam-lakshmi.jpg" },
+    { image: "/team/malyalam-goutham.jpg" },
+    { image: "/team/hin-aman.jpg" }
   ]
 
   // Add cursor effect state
@@ -379,8 +394,8 @@ export default function VoiceITWebsite() {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="bg-primary-bg border-neutral-light hover:shadow-lg transition-all duration-300 hover:border-accent-orange/30">
               <CardContent className="p-8 text-center">
-                <div className="bg-accent-orange/10 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                  <Mic className="h-8 w-8 text-accent-orange" />
+                <div className="h-[300px] w-full">
+                  <EvervaultCard text="Creative Expression" />
                 </div>
                 <h3 className="text-xl font-semibold text-text-primary mb-4">Creative Expression</h3>
                 <p className="text-text-secondary">
@@ -392,8 +407,8 @@ export default function VoiceITWebsite() {
 
             <Card className="bg-primary-bg border-neutral-light hover:shadow-lg transition-all duration-300 hover:border-accent-orange/30">
               <CardContent className="p-8 text-center">
-                <div className="bg-accent-warm/10 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                  <Users className="h-8 w-8 text-accent-warm" />
+                <div className="h-[300px] w-full">
+                  <EvervaultCard text="Community" />
                 </div>
                 <h3 className="text-xl font-semibold text-text-primary mb-4">Community Building</h3>
                 <p className="text-text-secondary">
@@ -405,8 +420,8 @@ export default function VoiceITWebsite() {
 
             <Card className="bg-primary-bg border-neutral-light hover:shadow-lg transition-all duration-300 hover:border-accent-orange/30">
               <CardContent className="p-8 text-center">
-                <div className="bg-accent-orange/10 p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                  <Headphones className="h-8 w-8 text-accent-orange" />
+                <div className="h-[300px] w-full">
+                  <EvervaultCard text="Skills" />
                 </div>
                 <h3 className="text-xl font-semibold text-text-primary mb-4">Skill Development</h3>
                 <p className="text-text-secondary">
@@ -476,58 +491,48 @@ export default function VoiceITWebsite() {
       </section>
 
       {/* Past Events Section */}
-      <section className="py-16 bg-neutral-dark">
+      <section className="py-32 bg-neutral-dark">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Past Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ScrollFloat
+            animationDuration={1}
+            ease="back.inOut(2)"
+            scrollStart="center bottom+=50%"
+            scrollEnd="bottom bottom-=40%"
+            stagger={0.03}
+            containerClassName="text-4xl font-bold text-center mb-48 text-white"
+            scrollContainerRef={scrollContainerRef}
+          >
+            Past Events
+          </ScrollFloat>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center mt-32">
             {[
               {
                 title: "Radio Workshop 2023",
                 date: "December 15, 2023",
-                image: "/placeholder.svg?height=300&width=300",
                 description: "A comprehensive workshop on radio broadcasting techniques and equipment handling.",
                 highlights: "150+ participants, 8 industry experts"
               },
               {
                 title: "Voice IT Annual Show",
                 date: "October 20, 2023",
-                image: "/placeholder.svg?height=300&width=300",
                 description: "Our annual showcase featuring the best of campus radio and entertainment.",
                 highlights: "Live performances, Guest RJs"
               },
               {
                 title: "Podcast Masterclass",
                 date: "August 5, 2023",
-                image: "/placeholder.svg?height=300&width=300",
                 description: "Learn the art of podcasting from industry professionals.",
                 highlights: "Hands-on training, Equipment demo"
               }
             ].map((event, index) => (
-              <div key={index} className="bg-primary-bg rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300">
-                <div className="relative">
-                  <Image
-                    src={event.image}
-                    alt={event.title}
-                    width={400}
-                    height={250}
-                    className="w-full h-48 object-cover"
+              <div key={index} className="flex justify-center">
+                <div style={{ height: '300px', position: 'relative' }}>
+                  <Folder 
+                    size={3} 
+                    color="#FF6B00" 
+                    className="custom-folder"
+                    items={[]}
                   />
-                  <div className="absolute top-4 right-4 bg-accent text-primary-bg px-3 py-1 rounded-full text-sm font-medium">
-                    {event.date}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <p className="text-neutral-light mb-4">{event.description}</p>
-                  <div className="flex items-center text-sm text-accent mb-4">
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                    </svg>
-                    {event.highlights}
-                  </div>
-                  <button className="w-full bg-neutral-dark text-primary-bg py-2 rounded-lg hover:bg-neutral-dark/90 transition-colors">
-                    View Gallery
-                  </button>
                 </div>
               </div>
             ))}
@@ -563,31 +568,32 @@ export default function VoiceITWebsite() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
-              <TiltedCard
-                key={index}
-                imageSrc={member.image}
-                altText={member.name}
-                containerHeight="400px"
-                containerWidth="100%"
-                imageHeight="400px"
-                imageWidth="100%"
-                rotateAmplitude={12}
-                scaleOnHover={1.05}
-                showMobileWarning={false}
-                showTooltip={false}
-                displayOverlayContent={false}
-              />
-            ))}
+          <div className="w-full h-full py-20">
+            <Carousel items={teamMembers.map((member, index) => (
+              <div key={member.image} className="px-2">
+                <TiltedCard
+                  imageSrc={member.image}
+                  altText="Team Member"
+                  containerHeight="400px"
+                  containerWidth="300px"
+                  imageHeight="400px"
+                  imageWidth="300px"
+                  displayOverlayContent={false}
+                  showTooltip={false}
+                  scaleOnHover={1.05}
+                  rotateAmplitude={10}
+                  showMobileWarning={false}
+                />
+              </div>
+            ))} />
           </div>
         </div>
       </section>
 
-      {/* Live Radio Section */}
-      <section id="live" className="py-20 bg-primary-bg/80 backdrop-blur-sm relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      {/* Live Radio & Podcasts Section */}
+      <section id="live" className="py-16 bg-neutral-dark">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
             <ScrollFloat
               animationDuration={1}
               ease="back.inOut(2)"
@@ -597,97 +603,80 @@ export default function VoiceITWebsite() {
               containerClassName="text-4xl font-bold text-text-primary"
               scrollContainerRef={scrollContainerRef}
             >
-              Live Radio & Podcasts
+              Radio & Podcasts
             </ScrollFloat>
-            <p className="text-xl text-text-secondary mt-4">
-              <VariableProximity
-                label="Tune in to our live broadcasts and catch up on our latest podcast episodes"
-                className="text-xl text-text-secondary"
-                fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                toFontVariationSettings="'wght' 1000, 'opsz' 40"
-                containerRef={liveTextRef as React.RefObject<HTMLElement>}
-                radius={100}
-                falloff="linear"
-              />
-            </p>
           </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <Card className="bg-primary-bg border-accent-orange/20 p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                    <span className="text-accent-orange font-semibold">LIVE NOW</span>
-                  </div>
-                  <Volume2 className="h-6 w-6 text-accent-orange" />
-                </div>
-                <h3 className="text-2xl font-bold text-text-primary mb-2">Campus Vibes</h3>
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Live Radio Card */}
+            <div className="flex-1 bg-primary-bg rounded-lg overflow-hidden shadow-lg">
+              <div className="p-6">
+                <h3 className="text-2xl font-bold mb-4">Live Radio</h3>
                 <p className="text-text-secondary mb-6">Your daily dose of music, news, and campus updates</p>
                 <AudioPlayer 
-                  audioUrl="/stream.mp3" 
+                  audioUrl="/podcasts/live-stream.mp3" 
                   title="Campus Vibes Live Stream"
                   className="mb-4"
                 />
-                <div className="h-12 flex space-x-1">
-                  {smallBarHeights.map((height, i) => (
-                    <div
-                      key={i}
-                      className="w-1 bg-accent-orange rounded-full transition-all duration-500"
-                      style={{
-                        height: `${height}px`,
-                        marginTop: 'auto'
-                      }}
-                    ></div>
-                  ))}
-                </div>
-              </Card>
-
-              <div className="space-y-4">
-                <h4 className="text-xl font-semibold text-text-primary">Recent Podcasts</h4>
-                {["Tech Talk Tuesday", "Campus Chronicles", "Music & More"].map((podcast, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center space-x-4 p-4 bg-primary-bg rounded-lg border border-neutral-light"
-                  >
-                    <div className="bg-accent-warm/10 p-2 rounded-full">
-                      <Waves className="h-4 w-4 text-accent-warm" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-text-primary">{podcast}</p>
-                      <p className="text-sm text-text-muted">Episode {index + 1}</p>
-                    </div>
-                    <AudioPlayer 
-                      audioUrl={`/podcasts/${podcast.toLowerCase().replace(/\s+/g, '-')}.mp3`}
-                      title={podcast}
-                    />
+                <div className="flex items-center space-x-4">
+                  <div className="bg-accent-warm/10 p-3 rounded-full">
+                    <Users className="h-5 w-5 text-accent-warm" />
                   </div>
-                ))}
+                  <div>
+                    <p className="font-medium text-text-primary">Listeners</p>
+                    <p className="text-text-secondary">1.2K Online</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="bg-gradient-to-br from-accent-orange/10 to-accent-warm/10 rounded-3xl p-8 backdrop-blur-sm border border-accent-orange/20">
-                <div className="text-center space-y-6">
-                  <div className="bg-accent-orange p-6 rounded-full w-24 h-24 mx-auto flex items-center justify-center">
-                    <Radio className="h-12 w-12 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-text-primary mb-2">24/7 Broadcasting</h3>
-                    <p className="text-text-secondary">
-                      Our radio never sleeps. Tune in anytime for music, talk shows, and campus updates.
-                    </p>
-                  </div>
-                  <div className="flex justify-center space-x-4">
-                    <Button
-                      variant="outline"
-                      className="border-accent-orange text-accent-orange hover:bg-accent-orange hover:text-white"
-                    >
-                      Schedule
-                    </Button>
-                    <Button className="bg-accent-warm hover:bg-accent-warm/90 text-white">Listen Now</Button>
-                  </div>
+            {/* Podcasts Card */}
+            <div className="flex-1 bg-primary-bg rounded-lg overflow-hidden shadow-lg">
+              <div className="p-6">
+                <h3 className="text-2xl font-bold mb-4">Latest Podcasts</h3>
+                <div className="space-y-4">
+                  {[
+                    {
+                      title: "Tech Talk Tuesday",
+                      icon: <Radio className="h-6 w-6 text-accent-warm" />,
+                      description: "Latest tech trends and discussions",
+                      audioUrl: "/podcasts/tech-talk-ep1.mp3"
+                    },
+                    {
+                      title: "Campus Chronicles",
+                      icon: <Users className="h-6 w-6 text-accent-warm" />,
+                      description: "Student life and campus events",
+                      audioUrl: "/podcasts/campus-chronicles-ep1.mp3"
+                    },
+                    {
+                      title: "Music & More",
+                      icon: <Headphones className="h-6 w-6 text-accent-warm" />,
+                      description: "Music reviews and artist interviews",
+                      audioUrl: "/podcasts/music-more-ep1.mp3"
+                    }
+                  ].map((podcast, index) => (
+                    <div key={index} className="flex items-center space-x-3 bg-accent-warm/5 p-3 rounded-lg hover:bg-accent-warm/10 transition-colors">
+                      <div className="flex-shrink-0 bg-accent-warm/10 p-2 rounded-lg">
+                        {podcast.icon}
+                      </div>
+                      <div className="flex-grow min-w-0">
+                        <h4 className="font-medium text-text-primary text-sm truncate">{podcast.title}</h4>
+                        <p className="text-xs text-text-secondary truncate">{podcast.description}</p>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <AudioPlayer 
+                          audioUrl={podcast.audioUrl}
+                          title={podcast.title}
+                          className="bg-accent-warm/10 p-1.5 rounded-lg hover:bg-accent-warm/20 transition-colors"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
+                <a href="https://www.youtube.com/@voiceit_vitcc" target="_blank" rel="noopener noreferrer">
+                  <button className="w-full mt-6 bg-accent-warm text-primary-bg py-2 rounded-lg hover:bg-accent-warm/90 transition-colors">
+                    View All Podcasts
+                  </button>
+                </a>
               </div>
             </div>
           </div>
@@ -733,17 +722,11 @@ export default function VoiceITWebsite() {
                     </div>
                     <div>
                       <p className="font-medium text-text-primary">Email</p>
-                      <p className="text-text-secondary">voiceit@vit.ac.in</p>
+                      <p className="text-text-secondary">voiceit.vitchennai@gmail.com</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
-                    <div className="bg-accent-warm/10 p-3 rounded-full">
-                      <Phone className="h-5 w-5 text-accent-warm" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-text-primary">Phone</p>
-                      <p className="text-text-secondary">+91 98765 43210</p>
-                    </div>
+                  
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="bg-accent-orange/10 p-3 rounded-full">
@@ -844,8 +827,8 @@ export default function VoiceITWebsite() {
               <h3 className="text-xl font-bold mb-4">Connect</h3>
               <ul className="space-y-2">
                 <li><a href="#" className="text-neutral-light hover:text-accent transition-colors">Instagram</a></li>
-                <li><a href="#" className="text-neutral-light hover:text-accent transition-colors">Twitter</a></li>
-                <li><a href="#" className="text-neutral-light hover:text-accent transition-colors">LinkedIn</a></li>
+                
+              
                 <li><a href="https://youtu.be/GV1CV79Gr4k" target="_blank" rel="noopener noreferrer" className="text-neutral-light hover:text-accent transition-colors">YouTube</a></li>
               </ul>
             </div>
@@ -854,7 +837,7 @@ export default function VoiceITWebsite() {
               <ul className="space-y-2">
                 <li className="text-neutral-light">VIT Chennai Campus</li>
                 <li className="text-neutral-light">Chennai, Tamil Nadu</li>
-                <li className="text-neutral-light">Email: voiceit@vit.ac.in</li>
+                <li className="text-neutral-light">Email: voiceit.vitchennai@gmail.com</li>
               </ul>
             </div>
           </div>
